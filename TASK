@@ -1,0 +1,51 @@
+//2022F-BSE-104
+
+package lab5;
+
+public class main {
+
+    public static void main(String[] args) {
+        // Create an array of threads to print each letter
+        Thread[] threads = new Thread[26];
+
+        // Create and start a thread for each letter from 'A' to 'Z'
+        for (char ch = 'A'; ch <= 'Z'; ch++) {
+            // Create a new thread for each character
+            threads[ch - 'A'] = new Thread(new AlphabetTask(ch));
+            threads[ch - 'A'].start(); // Start the thread
+        }
+        
+        // Wait for all threads to finish (optional)
+        for (Thread thread : threads) {
+            try {
+                thread.join(); // Ensure the main thread waits for each to finish
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+class AlphabetTask implements Runnable {
+    private char character;
+
+    public AlphabetTask(char character) {
+        this.character = character;
+    }
+
+    @Override
+    public void run() {
+        try {
+            // Generate a random sleep time between 100 and 500 milliseconds
+            int sleepTime = (int) (Math.random() * 400) + 100;
+            
+            // Sleep for the generated random time
+            Thread.sleep(sleepTime);
+            
+            // Print the character after the sleep time
+            System.out.print(character + " ");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
